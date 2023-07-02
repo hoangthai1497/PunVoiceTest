@@ -4,15 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomPrivateVoice : MonoBehaviour
+public class RoomPrivateVoice : MonoBehaviourPunCallbacks
 {
     byte roomID = 5;
     byte defaultRoom = 0;
     private void OnTriggerEnter(Collider other)
     {
         PrivateVoicePun chatVoice = other.GetComponent<PrivateVoicePun>();        
-        chatVoice.groupsToAdd.Add(roomID);
-        Debug.Log("Change Group "+ roomID);
+        chatVoice.groupsToAdd.Add(roomID);        
+       Debug.Log("Change Group "+ roomID);
     }
     private void OnTriggerExit(Collider other)
     {

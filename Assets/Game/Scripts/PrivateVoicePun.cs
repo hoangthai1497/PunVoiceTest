@@ -112,6 +112,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     protected void Update()
     {
+       
         if (!PunVoiceClient.Instance.Client.InRoom)
         {
             this.subscribedGroups = null;

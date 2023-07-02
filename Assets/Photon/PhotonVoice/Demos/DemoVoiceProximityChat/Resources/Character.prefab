@@ -89,6 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 645672331c982be4496cf5ed35bc9558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groupsToAdd: 
+  groupsToRemove: 
   subscribedGroups: 
 --- !u!1 &1641048942848062
 GameObject:
