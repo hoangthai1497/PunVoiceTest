@@ -1,4 +1,4 @@
-﻿#if PUN_2_OR_NEWER
+#if PUN_2_OR_NEWER
 
 using System.Collections.Generic;
 using Photon.Pun;
@@ -8,7 +8,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
-public class ProximityVoiceTrigger : VoiceComponent
+public class PrivateVoicePun : MonoBehaviourPunCallbacks
 {
     private List<byte> groupsToAdd = new List<byte>();
     private List<byte> groupsToRemove = new List<byte>();
@@ -16,6 +16,7 @@ public class ProximityVoiceTrigger : VoiceComponent
     [SerializeField] // TODO: make it readonly
     private byte[] subscribedGroups;
 
+    private byte _roomGroup = 5;
     private PhotonVoiceView photonVoiceView;
     private PhotonView photonView;
 
@@ -31,24 +32,24 @@ public class ProximityVoiceTrigger : VoiceComponent
         }
     }
 
-    protected override void Awake()
+    private void Awake()
     {
         this.photonVoiceView = this.GetComponentInParent<PhotonVoiceView>();
         this.photonView = this.GetComponentInParent<PhotonView>();
         Collider tmpCollider = this.GetComponent<Collider>();
-        tmpCollider.isTrigger = true;        
-        this.IsLocalCheck();        
+        tmpCollider.isTrigger = true;
+        this.IsLocalCheck();
     }
 
     private void ToggleTransmission()
     {
         if (this.photonVoiceView.RecorderInUse != null)
         {
-            byte group = this.TargetInterestGroup;
-            if (this.photonVoiceView.RecorderInUse.InterestGroup != group)
+           // byte group = this.TargetInterestGroup;
+            if (this.photonVoiceView.RecorderInUse.InterestGroup != _roomGroup)
             {
-                this.Logger.LogInfo("Setting RecorderInUse's InterestGroup to {0}", group);
-                this.photonVoiceView.RecorderInUse.InterestGroup = group;
+               
+                this.photonVoiceView.RecorderInUse.InterestGroup = _roomGroup;
             }
             this.photonVoiceView.RecorderInUse.RecordingEnabled = true;
         }
@@ -59,10 +60,11 @@ public class ProximityVoiceTrigger : VoiceComponent
         if (this.IsLocalCheck())
         {
             ProximityVoiceTrigger trigger = other.GetComponent<ProximityVoiceTrigger>();
+            
             if (trigger != null)
             {
                 byte group = trigger.TargetInterestGroup;
-                this.Logger.LogDebug("OnTriggerEnter {0}", group);
+               
                 if (group == this.TargetInterestGroup)
                 {
                     return;
@@ -87,7 +89,7 @@ public class ProximityVoiceTrigger : VoiceComponent
             if (trigger != null)
             {
                 byte group = trigger.TargetInterestGroup;
-                this.Logger.LogDebug("OnTriggerExit {0}", group);
+               
                 if (group == this.TargetInterestGroup)
                 {
                     return;
@@ -128,7 +130,6 @@ public class ProximityVoiceTrigger : VoiceComponent
                 {
                     toRemove = this.groupsToRemove.ToArray();
                 }
-                this.Logger.LogInfo("client of actor number {0} trying to change groups, to_be_removed#={1} to_be_added#={2}", this.TargetInterestGroup, this.groupsToRemove.Count, this.groupsToAdd.Count);
                 if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
                 {
                     if (this.subscribedGroups != null)
@@ -161,10 +162,7 @@ public class ProximityVoiceTrigger : VoiceComponent
                     this.groupsToAdd.Clear();
                     this.groupsToRemove.Clear();
                 }
-                else
-                {
-                    this.Logger.LogError("Error changing groups");
-                }
+                
             }
             this.ToggleTransmission();
         }
@@ -179,7 +177,6 @@ public class ProximityVoiceTrigger : VoiceComponent
         }
         if (this.enabled)
         {
-            this.Logger.LogInfo("Disabling ProximityVoiceTrigger as does not belong to local player, actor number {0}", this.TargetInterestGroup);
             this.enabled = false;
         }
         return false;
