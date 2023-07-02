@@ -6,8 +6,8 @@ using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Collider))]
+//[RequireComponent(typeof(Rigidbody))]
 public class PrivateVoicePun : MonoBehaviourPunCallbacks
 {
     public List<byte> groupsToAdd = new List<byte>();
