@@ -13,7 +13,8 @@ public class PrivateVoiceChatTrigger : MonoBehaviour
         {
             byte[] groupsToAdd = new byte[] { privateInterestGroup };
             byte[] groupsToRemove = null;
-            PhotonNetwork.NetworkingClient.OpChangeGroups(groupsToRemove, groupsToAdd);
+            //PhotonNetwork.NetworkingClient.OpChangeGroups(groupsToRemove, groupsToAdd);
+            otherPhotonView.RPC("ChangeGroup",RpcTarget.OthersBuffered, groupsToRemove, groupsToAdd);
            //otherPhotonView.Owner.OpChangeGroups(groupsToAdd, groupsToRemove);
         }
     }
@@ -25,7 +26,9 @@ public class PrivateVoiceChatTrigger : MonoBehaviour
         {
             byte[] groupsToAdd = null;
             byte[] groupsToRemove = new byte[] { privateInterestGroup };
-            PhotonNetwork.NetworkingClient.OpChangeGroups(groupsToRemove, groupsToAdd);
+            //PhotonNetwork.NetworkingClient.OpChangeGroups(groupsToRemove, groupsToAdd);
+            otherPhotonView.RPC("ChangeGroup", RpcTarget.OthersBuffered, groupsToRemove, groupsToAdd);
+
         }
     }
 }
