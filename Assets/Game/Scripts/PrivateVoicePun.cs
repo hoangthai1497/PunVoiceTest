@@ -75,7 +75,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 }
                 if (!this.groupsToAdd.Contains(group))
                 {
-                    this.groupsToAdd.Add(group);
+                    this.groupsToAdd.Add(_roomGroup);
                 }
             }
         }
@@ -98,13 +98,13 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 {
                     return;
                 }
-                if (this.groupsToAdd.Contains(group))
+                if (this.groupsToAdd.Contains(_roomGroup))
                 {
-                    this.groupsToAdd.Remove(group);
+                    this.groupsToAdd.Remove(_roomGroup);
                 }
-                if (!this.groupsToRemove.Contains(group))
+                if (!this.groupsToRemove.Contains(_roomGroup))
                 {
-                    this.groupsToRemove.Add(group);
+                    this.groupsToRemove.Add(_roomGroup);
                 }
             }
         }
