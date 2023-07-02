@@ -7,9 +7,10 @@ using UnityEngine;
 public class audioChangeInter : MonoBehaviour
 {
     [PunRPC]
-    private void ChangeAudioGroups(byte[] groupsToAdd, byte[] groupsToRemove)
+    private void ChangeGroup(byte[] groupsToAdd, byte[] groupsToRemove)
     {
         PunVoiceClient.Instance.Client.OpChangeGroups(groupsToRemove, groupsToAdd);
+        Debug.Log("Call");
     }
     private void Update()
     {
