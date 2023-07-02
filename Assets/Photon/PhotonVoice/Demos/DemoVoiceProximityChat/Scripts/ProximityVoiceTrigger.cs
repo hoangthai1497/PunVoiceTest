@@ -61,7 +61,8 @@ public class ProximityVoiceTrigger : VoiceComponent
             ProximityVoiceTrigger trigger = other.GetComponent<ProximityVoiceTrigger>();
             if (trigger != null)
             {
-                byte group = trigger.TargetInterestGroup;
+                // byte group = trigger.TargetInterestGroup;
+                byte group = 6;
                 this.Logger.LogDebug("OnTriggerEnter {0}", group);
                 if (group == this.TargetInterestGroup)
                 {
