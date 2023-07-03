@@ -74,7 +74,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 groupsToRemove = trigger._listInterestGroupRemove;
 
             }
-            this.photonView.RPC("UpdateList", RpcTarget.All);
+            trigger.photonView.RPC("UpdateList", RpcTarget.All);
         }
     }
     private void ToggleTransmission()
