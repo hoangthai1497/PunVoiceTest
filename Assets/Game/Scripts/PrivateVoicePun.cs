@@ -41,7 +41,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         tmpCollider.isTrigger = true;
         this.IsLocalCheck();
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Room"))
@@ -51,8 +51,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
 
                 trigger._listInterestGroupAdd.Add(TargetInterestGroup);
+                trigger.photonView.RPC("UpdateList", RpcTarget.All);
                 groupsToAdd = trigger._listInterestGroupAdd;
-                trigger.photonView.RPC("UpdateList", RpcTarget.All);                
             }
         }
     }
@@ -65,16 +65,18 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
                 {
                     trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
+                    trigger.photonView.RPC("UpdateList", RpcTarget.All);
                     groupsToAdd = trigger._listInterestGroupAdd;
                 }
-            }
-            if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
-            {
-                trigger._listInterestGroupRemove.Add(TargetInterestGroup);
-                groupsToRemove = trigger._listInterestGroupRemove;
 
+                if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
+                {
+                    trigger._listInterestGroupRemove.Add(TargetInterestGroup);
+                    trigger.photonView.RPC("UpdateList", RpcTarget.All);
+                    groupsToRemove = trigger._listInterestGroupRemove;
+
+                }
             }
-            trigger.photonView.RPC("UpdateList", RpcTarget.All);
         }
     }
     private void ToggleTransmission()
