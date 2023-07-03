@@ -49,8 +49,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null && photonView.IsMine)
             {
-               // trigger._listInterestGroupAdd.Add(TargetInterestGroup);
-                trigger.photonView.RPC("AddToList", RpcTarget.All,TargetInterestGroup);
+                trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
             }
         }
@@ -61,32 +60,15 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         {
             if (trigger != null && photonView.IsMine)
             {
-                //if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
-                //{
-                //    trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
-                //    trigger.photonView.RPC("UpdateList", RpcTarget.All, TargetInterestGroup);
-                //    groupsToAdd = trigger._listInterestGroupAdd;
-                //}
+                trigger.photonView.RPC("RemoveToList", RpcTarget.All, TargetInterestGroup);
 
-                //if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
-                //{
-                //    trigger._listInterestGroupRemove.Add(TargetInterestGroup);
-                //    trigger.photonView.RPC("UpdateList", RpcTarget.All);
-                //    groupsToRemove = trigger._listInterestGroupRemove;
-
-                //}
-                trigger.photonView.RPC("RemoveToList", RpcTarget.All,TargetInterestGroup);
-                groupsToRemove.Clear();
-                //groupsToAdd = trigger._listInterestGroupAdd;
+                groupsToAdd = trigger._listInterestGroupAdd;
                 groupsToAdd.Clear();
-                groupsToRemove.Clear();
+                groupsToRemove = trigger._listInterestGroupRemove;
             }
         }
     }
-    private void RemoveFromGroup()
-    {
 
-    }
     private void ToggleTransmission()
     {
         if (this.photonVoiceView.RecorderInUse != null)
@@ -103,8 +85,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     private void ChangeGroupSubcrise()
     {
-        //if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
-        //{
+        if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
+        {
             byte[] toAdd = null;
             byte[] toRemove = null;
             if (this.groupsToAdd.Count > 0)
@@ -152,7 +134,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 //this.groupsToRemove.Clear();
             }
 
-        //}
+        }
     }
 
     protected void Update()
