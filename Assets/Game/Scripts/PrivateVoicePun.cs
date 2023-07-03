@@ -20,6 +20,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     private PhotonVoiceView photonVoiceView;
     private PhotonView photonView;
     private RoomTrigger trigger;
+    Collider tmpCollider;
     public byte TargetInterestGroup
     {
         get
@@ -35,20 +36,26 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     private void Awake()
     {
         this.photonVoiceView = this.GetComponentInParent<PhotonVoiceView>();
-        this.photonView = this.GetComponentInParent<PhotonView>();     
-        Collider tmpCollider = this.GetComponent<Collider>();
+        this.photonView = this.GetComponentInParent<PhotonView>();
+        tmpCollider = this.GetComponent<Collider>();
         tmpCollider.isTrigger = true;
         this.IsLocalCheck();
     }
+    private void Start()
+    {
+        tmpCollider.enabled = false;   
+    }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Room"))
+        if (other.CompareTag("Room") && photonView.IsMine)
         {
+            tmpCollider.enabled = true;
             trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null)
             {
+
                 trigger._listInterestGroupAdd.Add(TargetInterestGroup);
-                groupsToAdd = trigger._listInterestGroupAdd;                
+                groupsToAdd = trigger._listInterestGroupAdd;
                 foreach (var item in trigger._listInterestGroupAdd)
                 {
                     Debug.Log("trigger add " + item);
@@ -59,22 +66,20 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Room"))
-        {           
+        {
             if (trigger != null)
-            {  
+            {
                 if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
                 {
                     trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
                     groupsToAdd = trigger._listInterestGroupAdd;
-                   
                 }
-
             }
             if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
-            {                
+            {
                 trigger._listInterestGroupRemove.Add(TargetInterestGroup);
                 groupsToRemove = trigger._listInterestGroupRemove;
-                
+
             }
 
         }
@@ -93,7 +98,55 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         }
     }
 
+    private void ChangeGroupSubcrise()
+    {
+        if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
+        {
+            byte[] toAdd = null;
+            byte[] toRemove = null;
+            if (this.groupsToAdd.Count > 0)
+            {
+                toAdd = this.groupsToAdd.ToArray();
+            }
+            if (this.groupsToRemove.Count > 0)
+            {
+                toRemove = this.groupsToRemove.ToArray();
+            }
+            if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
+            {
+                if (this.subscribedGroups != null)
+                {
+                    List<byte> list = new List<byte>();
+                    for (int i = 0; i < this.subscribedGroups.Length; i++)
+                    {
+                        list.Add(this.subscribedGroups[i]);
+                    }
+                    for (int i = 0; i < this.groupsToRemove.Count; i++)
+                    {
+                        if (list.Contains(this.groupsToRemove[i]))
+                        {
+                            list.Remove(this.groupsToRemove[i]);
+                        }
+                    }
+                    for (int i = 0; i < this.groupsToAdd.Count; i++)
+                    {
+                        if (!list.Contains(this.groupsToAdd[i]))
+                        {
+                            list.Add(this.groupsToAdd[i]);
+                        }
+                    }
+                    this.subscribedGroups = list.ToArray();
+                }
+                else
+                {
+                    this.subscribedGroups = toAdd;
+                }
+                //this.groupsToAdd.Clear();
+                //this.groupsToRemove.Clear();
+            }
 
+        }
+    }
 
     protected void Update()
     {
@@ -104,52 +157,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         }
         else if (this.IsLocalCheck())
         {
-            if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
-            {
-                byte[] toAdd = null;
-                byte[] toRemove = null;
-                if (this.groupsToAdd.Count > 0)
-                {
-                    toAdd = this.groupsToAdd.ToArray();
-                }
-                if (this.groupsToRemove.Count > 0)
-                {
-                    toRemove = this.groupsToRemove.ToArray();
-                }
-                if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
-                {
-                    if (this.subscribedGroups != null)
-                    {
-                        List<byte> list = new List<byte>();
-                        for (int i = 0; i < this.subscribedGroups.Length; i++)
-                        {
-                            list.Add(this.subscribedGroups[i]);
-                        }
-                        for (int i = 0; i < this.groupsToRemove.Count; i++)
-                        {
-                            if (list.Contains(this.groupsToRemove[i]))
-                            {
-                                list.Remove(this.groupsToRemove[i]);
-                            }
-                        }
-                        for (int i = 0; i < this.groupsToAdd.Count; i++)
-                        {
-                            if (!list.Contains(this.groupsToAdd[i]))
-                            {
-                                list.Add(this.groupsToAdd[i]);
-                            }
-                        }
-                        this.subscribedGroups = list.ToArray();
-                    }
-                    else
-                    {
-                        this.subscribedGroups = toAdd;
-                    }
-                    //this.groupsToAdd.Clear();
-                    //this.groupsToRemove.Clear();
-                }
-
-            }
+            ChangeGroupSubcrise();
             this.ToggleTransmission();
         }
     }
