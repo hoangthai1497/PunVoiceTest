@@ -44,7 +44,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
         if (other.CompareTag("Room"))
         {
             isOut = false;
@@ -58,7 +58,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     }
     private void OnTriggerExit(Collider other)
     {
-       
+
         if (other.CompareTag("Room"))
         {
             isOut = true;
@@ -67,9 +67,9 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 trigger.photonView.RPC("RemoveToList", RpcTarget.All, TargetInterestGroup);
 
                 groupsToAdd = trigger._listInterestGroupAdd;
-              
+
                 groupsToRemove = trigger._listInterestGroupRemove;
-                
+
             }
         }
     }
@@ -94,14 +94,21 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         {
             byte[] toAdd = null;
             byte[] toRemove = null;
-            if (this.groupsToAdd.Count > 0 && isOut == true)
+            if (this.groupsToAdd.Count > 0)
             {
-                groupsToAdd.Clear();
+                if (isOut == true)
+                {
+
+                    groupsToAdd.Clear();
+                }
                 toAdd = this.groupsToAdd.ToArray();
             }
-            if (this.groupsToRemove.Count > 0 && isOut == true)
+            if (this.groupsToRemove.Count > 0)
             {
-                groupsToRemove.Clear();
+                if (isOut == true)
+                {
+                    groupsToRemove.Clear();
+                }
                 toRemove = this.groupsToRemove.ToArray();
             }
 
