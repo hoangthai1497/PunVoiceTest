@@ -14,9 +14,22 @@ public class RoomTrigger : MonoBehaviour
         photonView = GetComponent<PhotonView>();
     }
     [PunRPC]
-    public void UpdateList()
+    public void AddToList(byte value)
     {
-        _listInterestGroupAdd = this._listInterestGroupAdd;
-        _listInterestGroupRemove = this._listInterestGroupRemove;
+        _listInterestGroupAdd.Add(value);
+    }
+    [PunRPC]
+    public void RemoveToList(byte value)
+    {
+        Debug.Log("check " + _listInterestGroupAdd.Contains(value));
+        if (_listInterestGroupAdd.Contains(value))
+        {
+            _listInterestGroupAdd.Remove(value);
+            Debug.Log("remove");
+        }
+        if (!_listInterestGroupRemove.Contains(value))
+        {
+            _listInterestGroupRemove.Add(value);
+        }
     }
 }

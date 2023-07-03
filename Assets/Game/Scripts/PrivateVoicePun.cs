@@ -49,9 +49,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null && photonView.IsMine)
             {
-
-                trigger._listInterestGroupAdd.Add(TargetInterestGroup);
-                trigger.photonView.RPC("UpdateList", RpcTarget.All);
+               // trigger._listInterestGroupAdd.Add(TargetInterestGroup);
+                trigger.photonView.RPC("AddToList", RpcTarget.All,TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
             }
         }
@@ -62,20 +61,23 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         {
             if (trigger != null && photonView.IsMine)
             {
-                if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
-                {
-                    trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
-                    trigger.photonView.RPC("UpdateList", RpcTarget.All);
-                    groupsToAdd = trigger._listInterestGroupAdd;
-                }
+                //if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
+                //{
+                //    trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
+                //    trigger.photonView.RPC("UpdateList", RpcTarget.All, TargetInterestGroup);
+                //    groupsToAdd = trigger._listInterestGroupAdd;
+                //}
 
-                if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
-                {
-                    trigger._listInterestGroupRemove.Add(TargetInterestGroup);
-                    trigger.photonView.RPC("UpdateList", RpcTarget.All);
-                    groupsToRemove = trigger._listInterestGroupRemove;
+                //if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
+                //{
+                //    trigger._listInterestGroupRemove.Add(TargetInterestGroup);
+                //    trigger.photonView.RPC("UpdateList", RpcTarget.All);
+                //    groupsToRemove = trigger._listInterestGroupRemove;
 
-                }
+                //}
+                trigger.photonView.RPC("RemoveToList", RpcTarget.All,TargetInterestGroup);
+                groupsToRemove = trigger._listInterestGroupRemove;
+                groupsToAdd = trigger._listInterestGroupAdd;
             }
         }
     }
