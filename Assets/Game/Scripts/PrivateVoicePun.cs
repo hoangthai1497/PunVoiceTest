@@ -19,7 +19,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     private byte _roomGroup = 5;
     private PhotonVoiceView photonVoiceView;
     private PhotonView photonView;
-
+    private RoomTrigger trigger;
     public byte TargetInterestGroup
     {
         get
@@ -35,8 +35,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     private void Awake()
     {
         this.photonVoiceView = this.GetComponentInParent<PhotonVoiceView>();
-        this.photonView = this.GetComponentInParent<PhotonView>();
-        Debug.Log("get Photon" + photonView.ViewID);
+        this.photonView = this.GetComponentInParent<PhotonView>();     
         Collider tmpCollider = this.GetComponent<Collider>();
         tmpCollider.isTrigger = true;
         this.IsLocalCheck();
@@ -45,48 +44,37 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     {
         if (other.CompareTag("Room"))
         {
-            RoomTrigger trigger = other.GetComponent<RoomTrigger>();
+            trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null)
             {
                 trigger._listInterestGroupAdd.Add(TargetInterestGroup);
-                groupsToAdd = trigger._listInterestGroupAdd;
-                Debug.Log("Add Group");
-                foreach (var item in groupsToAdd)
+                groupsToAdd = trigger._listInterestGroupAdd;                
+                foreach (var item in trigger._listInterestGroupAdd)
                 {
                     Debug.Log("trigger add " + item);
                 }
             }
-
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Room"))
-        {
-            RoomTrigger trigger = other.GetComponent<RoomTrigger>();
+        {           
             if (trigger != null)
-            {
+            {  
                 if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
                 {
-                    Debug.Log("(trigger._listInterestGroupAdd.Contains(TargetInterestGroup)" + (trigger._listInterestGroupAdd.Contains(TargetInterestGroup)));
                     trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
                     groupsToAdd = trigger._listInterestGroupAdd;
-                    foreach (var item in groupsToAdd)
-                    {
-                        Debug.Log("TriggerExit add " + item);
-                    }
+                   
                 }
 
             }
             if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
-            {
-                groupsToAdd.Remove(TargetInterestGroup);
+            {                
                 trigger._listInterestGroupRemove.Add(TargetInterestGroup);
                 groupsToRemove = trigger._listInterestGroupRemove;
-                foreach (var item in groupsToRemove)
-                {
-                    Debug.Log("TriggerExit remove " + item);
-                }
+                
             }
 
         }
@@ -157,8 +145,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                     {
                         this.subscribedGroups = toAdd;
                     }
-                    this.groupsToAdd.Clear();
-                    this.groupsToRemove.Clear();
+                    //this.groupsToAdd.Clear();
+                    //this.groupsToRemove.Clear();
                 }
 
             }
