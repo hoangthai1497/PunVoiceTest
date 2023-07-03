@@ -49,7 +49,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
                 trigger._listInterestGroupAdd.Add(TargetInterestGroup);
             }
-            photonView.RPC("ChangeGroupSub", RpcTarget.OthersBuffered);
+           this.photonView.RPC("ChangeGroupSub", RpcTarget.OthersBuffered);
         }
     }
     private void OnTriggerExit(Collider other)
