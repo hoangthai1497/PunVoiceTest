@@ -47,7 +47,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         if (other.CompareTag("Room"))
         {
             trigger = other.GetComponent<RoomTrigger>();
-            if (trigger != null)
+            if (trigger != null && photonView.IsMine)
             {
 
                 trigger._listInterestGroupAdd.Add(TargetInterestGroup);
