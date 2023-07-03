@@ -109,7 +109,12 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     //        }
     //    }
     //}
-
+    [PunRPC]
+    private void ChangGroupSub(byte[] groupRemove, byte[] groupAdd)
+    {
+        PunVoiceClient.Instance.Client.OpChangeGroups(groupRemove, groupAdd);
+        Debug.Log("Call RPC");
+    }
     protected void Update()
     {
        

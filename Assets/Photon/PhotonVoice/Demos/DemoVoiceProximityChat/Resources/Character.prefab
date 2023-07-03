@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 54223828005228814}
   - component: {fileID: 114992584006397596}
   - component: {fileID: 8464099874156387927}
-  - component: {fileID: 5027961666878136247}
   m_Layer: 0
   m_Name: ProximityVoiceChat
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,7 +84,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1032974383200524}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 645672331c982be4496cf5ed35bc9558, type: 3}
   m_Name: 
@@ -93,18 +92,6 @@ MonoBehaviour:
   groupsToAdd: 
   groupsToRemove: 
   subscribedGroups: 
---- !u!114 &5027961666878136247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032974383200524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4647ec107ddc5524793183c85db04460, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1641048942848062
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +112,7 @@ GameObject:
   - component: {fileID: 114880145252837926}
   m_Layer: 0
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
