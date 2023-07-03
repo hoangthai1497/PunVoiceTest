@@ -40,7 +40,37 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         tmpCollider.isTrigger = true;
         this.IsLocalCheck();
     }
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Room"))
+        {
+            RoomTrigger trigger = other.GetComponent<RoomTrigger>();
+            if (trigger != null)
+            {
+                trigger._listInterestGroupAdd.Add(TargetInterestGroup);
+            }
+            photonView.RPC("ChangeGroupSub", RpcTarget.OthersBuffered);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Room"))
+        {
+            RoomTrigger trigger = other.GetComponent<RoomTrigger>();
+            if (trigger != null)
+            {
+                if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
+                {
+                    trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
+                }
+            }
+            if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
+            {
+                trigger._listInterestGroupRemove.Add(TargetInterestGroup);
+            }
+            photonView.RPC("ChangeGroupSub", RpcTarget.OthersBuffered);
+        }
+    }
     private void ToggleTransmission()
     {
         if (this.photonVoiceView.RecorderInUse != null)
@@ -55,69 +85,11 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         }
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (this.IsLocalCheck())
-    //    {
-    //        ProximityVoiceTrigger trigger = other.GetComponent<ProximityVoiceTrigger>();
-
-    //        if (trigger != null)
-    //        {
-    //            byte group = trigger.TargetInterestGroup;
-
-    //            if (group == this.TargetInterestGroup)
-    //            {
-    //                return;
-    //            }
-    //            if (group == 0)
-    //            {
-    //                return;
-    //            }
-    //            if (!this.groupsToAdd.Contains(group))
-    //            {
-    //                this.groupsToAdd.Add(_roomGroup);
-    //            }
-    //        }
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (this.IsLocalCheck() && other.CompareTag("Room"))
-    //    {
-    //        ProximityVoiceTrigger trigger = other.GetComponent<ProximityVoiceTrigger>();
-    //        if (trigger != null)
-    //        {
-    //            byte group = trigger.TargetInterestGroup;
-
-    //            if (group == this.TargetInterestGroup)
-    //            {
-    //                return;
-    //            }
-    //            if (group == 0)
-    //            {
-    //                return;
-    //            }
-    //            if (this.groupsToAdd.Contains(_roomGroup))
-    //            {
-    //                this.groupsToAdd.Remove(_roomGroup);
-    //            }
-    //            if (!this.groupsToRemove.Contains(_roomGroup))
-    //            {
-    //                this.groupsToRemove.Add(_roomGroup);
-    //            }
-    //        }
-    //    }
-    //}
-    [PunRPC]
-    private void ChangGroupSub(byte[] groupRemove, byte[] groupAdd)
-    {
-        PunVoiceClient.Instance.Client.OpChangeGroups(groupRemove, groupAdd);
-        Debug.Log("Call RPC");
-    }
+    
+    
     protected void Update()
     {
-       
+
         if (!PunVoiceClient.Instance.Client.InRoom)
         {
             this.subscribedGroups = null;
