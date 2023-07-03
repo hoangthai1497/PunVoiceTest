@@ -51,8 +51,12 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                  trigger._listInterestGroupAdd.Add(TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
                 Debug.Log("Add Group");
+                foreach (var item in groupsToAdd)
+                {
+                    Debug.Log(item);
+                }
             }
-           this.photonView.RPC("ChangeGroupSub", RpcTarget.All);
+         
         }
     }
     private void OnTriggerExit(Collider other)
@@ -72,7 +76,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 trigger._listInterestGroupRemove.Add(TargetInterestGroup);
                 groupsToRemove = trigger._listInterestGroupRemove;
             }
-           this.photonView.RPC("ChangeGroupSub", RpcTarget.All);
+           
         }
     }
     private void ToggleTransmission()

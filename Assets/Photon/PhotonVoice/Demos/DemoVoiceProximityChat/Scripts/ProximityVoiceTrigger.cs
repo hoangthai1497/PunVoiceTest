@@ -132,6 +132,7 @@ public class ProximityVoiceTrigger : VoiceComponent
                 this.Logger.LogInfo("client of actor number {0} trying to change groups, to_be_removed#={1} to_be_added#={2}", this.TargetInterestGroup, this.groupsToRemove.Count, this.groupsToAdd.Count);
                 if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
                 {
+                    PunVoiceClient.Instance.Client.ChangeAudioGroups(toRemove, toAdd);
                     if (this.subscribedGroups != null)
                     {
                         List<byte> list = new List<byte>();
