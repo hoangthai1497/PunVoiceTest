@@ -65,9 +65,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveToList", RpcTarget.All, TargetInterestGroup);
-
                 groupsToAdd = trigger._listInterestGroupAdd;
-
                 groupsToRemove = trigger._listInterestGroupRemove;
 
             }
@@ -98,18 +96,24 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
                 if (isOut == true)
                 {
-
                     groupsToAdd.Clear();
+                    groupsToAdd.Add(TargetInterestGroup);
                 }
                 toAdd = this.groupsToAdd.ToArray();
+
             }
             if (this.groupsToRemove.Count > 0)
             {
                 if (isOut == true)
                 {
                     groupsToRemove.Clear();
+                    toRemove = null;
                 }
-                toRemove = this.groupsToRemove.ToArray();
+                else
+                {
+                    toRemove = this.groupsToRemove.ToArray();
+                }
+
             }
 
             Debug.Log("groupRemove " + groupsToRemove.Count);
