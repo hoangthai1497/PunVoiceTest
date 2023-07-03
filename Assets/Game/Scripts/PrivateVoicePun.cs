@@ -41,15 +41,11 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         tmpCollider.isTrigger = true;
         this.IsLocalCheck();
     }
-    private void Start()
-    {
-        tmpCollider.enabled = false;   
-    }
+    
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Room") && photonView.IsMine)
+        if (other.CompareTag("Room"))
         {
-            tmpCollider.enabled = true;
             trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null)
             {
@@ -67,7 +63,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     {
         if (other.CompareTag("Room"))
         {
-            if (trigger != null)
+            if (trigger != null && photonView.IsMine)
             {
                 if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
                 {
