@@ -69,6 +69,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
                 {
                     trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
+                    groupsToAdd = trigger._listInterestGroupAdd;
                 }
             }
             if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
