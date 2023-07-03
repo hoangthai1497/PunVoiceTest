@@ -48,15 +48,15 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             RoomTrigger trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null)
             {
-                 trigger._listInterestGroupAdd.Add(TargetInterestGroup);
+                trigger._listInterestGroupAdd.Add(TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
                 Debug.Log("Add Group");
                 foreach (var item in groupsToAdd)
                 {
-                    Debug.Log(item);
+                    Debug.Log("trigger add " + item);
                 }
             }
-         
+
         }
     }
     private void OnTriggerExit(Collider other)
@@ -68,16 +68,27 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
                 if (trigger._listInterestGroupAdd.Contains(TargetInterestGroup))
                 {
+                    Debug.Log("(trigger._listInterestGroupAdd.Contains(TargetInterestGroup)" + (trigger._listInterestGroupAdd.Contains(TargetInterestGroup)));
                     trigger._listInterestGroupAdd.Remove(TargetInterestGroup);
                     groupsToAdd = trigger._listInterestGroupAdd;
+                    foreach (var item in groupsToAdd)
+                    {
+                        Debug.Log("TriggerExit add " + item);
+                    }
                 }
+
             }
             if (!trigger._listInterestGroupRemove.Contains(TargetInterestGroup))
             {
+                groupsToAdd.Remove(TargetInterestGroup);
                 trigger._listInterestGroupRemove.Add(TargetInterestGroup);
                 groupsToRemove = trigger._listInterestGroupRemove;
+                foreach (var item in groupsToRemove)
+                {
+                    Debug.Log("TriggerExit remove " + item);
+                }
             }
-           
+
         }
     }
     private void ToggleTransmission()
@@ -94,8 +105,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         }
     }
 
-    
-    
+
+
     protected void Update()
     {
 
