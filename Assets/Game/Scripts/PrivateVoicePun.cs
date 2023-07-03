@@ -79,7 +79,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 groupsToRemove.Clear();
                 //groupsToAdd = trigger._listInterestGroupAdd;
                 groupsToAdd.Clear();
-                //groupsToRemove.Clear();
+                groupsToRemove.Clear();
             }
         }
     }
@@ -103,8 +103,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     private void ChangeGroupSubcrise()
     {
-        if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
-        {
+        //if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
+        //{
             byte[] toAdd = null;
             byte[] toRemove = null;
             if (this.groupsToAdd.Count > 0)
@@ -115,6 +115,10 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
                 toRemove = this.groupsToRemove.ToArray();
             }
+
+            Debug.Log("groupRemove" + groupsToRemove.Count);
+            Debug.Log("groupAdd" + groupsToAdd.Count);
+
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
             {
                 if (this.subscribedGroups != null)
@@ -148,7 +152,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 //this.groupsToRemove.Clear();
             }
 
-        }
+        //}
     }
 
     protected void Update()
