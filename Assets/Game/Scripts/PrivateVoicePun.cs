@@ -36,6 +36,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     {
         this.photonVoiceView = this.GetComponentInParent<PhotonVoiceView>();
         this.photonView = this.GetComponentInParent<PhotonView>();
+        Debug.Log("get Photon" + photonView.ViewID);
         Collider tmpCollider = this.GetComponent<Collider>();
         tmpCollider.isTrigger = true;
         this.IsLocalCheck();
@@ -51,7 +52,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 groupsToAdd = trigger._listInterestGroupAdd;
                 Debug.Log("Add Group");
             }
-           this.photonView.RPC("ChangeGroupSub", RpcTarget.OthersBuffered);
+           this.photonView.RPC("ChangeGroupSub", RpcTarget.All);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -71,7 +72,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 trigger._listInterestGroupRemove.Add(TargetInterestGroup);
                 groupsToRemove = trigger._listInterestGroupRemove;
             }
-            photonView.RPC("ChangeGroupSub", RpcTarget.OthersBuffered);
+           this.photonView.RPC("ChangeGroupSub", RpcTarget.All);
         }
     }
     private void ToggleTransmission()
