@@ -15,7 +15,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     [SerializeField] // TODO: make it readonly
     private byte[] subscribedGroups;
-
+    private bool isOut = false;
     private byte _roomGroup = 5;
     private PhotonVoiceView photonVoiceView;
     private PhotonView photonView;
@@ -44,8 +44,10 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.CompareTag("Room"))
         {
+            isOut = true;
             trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null && photonView.IsMine)
             {
@@ -56,15 +58,18 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     }
     private void OnTriggerExit(Collider other)
     {
+       
         if (other.CompareTag("Room"))
         {
+            isOut = true;
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveToList", RpcTarget.All, TargetInterestGroup);
 
                 groupsToAdd = trigger._listInterestGroupAdd;
-                groupsToAdd.Clear();
+              
                 groupsToRemove = trigger._listInterestGroupRemove;
+                
             }
         }
     }
@@ -89,17 +94,19 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         {
             byte[] toAdd = null;
             byte[] toRemove = null;
-            if (this.groupsToAdd.Count > 0)
+            if (this.groupsToAdd.Count > 0 && isOut == true)
             {
+                groupsToAdd.Clear();
                 toAdd = this.groupsToAdd.ToArray();
             }
-            if (this.groupsToRemove.Count > 0)
+            if (this.groupsToRemove.Count > 0 && isOut == true)
             {
+                groupsToRemove.Clear();
                 toRemove = this.groupsToRemove.ToArray();
             }
 
-            Debug.Log("groupRemove" + groupsToRemove.Count);
-            Debug.Log("groupAdd" + groupsToAdd.Count);
+            Debug.Log("groupRemove " + groupsToRemove.Count);
+            Debug.Log("groupAdd " + groupsToAdd.Count);
 
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
             {
