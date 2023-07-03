@@ -21,7 +21,6 @@ public class RoomTrigger : MonoBehaviour
     [PunRPC]
     public void RemoveToList(byte value)
     {
-        Debug.Log("check " + _listInterestGroupAdd.Contains(value));
         if (_listInterestGroupAdd.Contains(value))
         {
             _listInterestGroupAdd.Remove(value);
