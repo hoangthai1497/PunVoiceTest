@@ -93,14 +93,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             byte[] toAdd = null;
             byte[] toRemove = null;
             if (this.groupsToAdd.Count > 0)
-            {
-                if (isOut == true)
-                {
-                    groupsToAdd.Clear();
-                    groupsToAdd.Add(TargetInterestGroup);
-                }
+            {               
                 toAdd = this.groupsToAdd.ToArray();
-
             }
             if (this.groupsToRemove.Count > 0)
             {
