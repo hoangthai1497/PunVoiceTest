@@ -51,7 +51,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         if (other.CompareTag("Room"))
         {
             Player player = photonView.Owner;
-            photonView.RPC("AddGroupPlayer", RpcTarget.Others, player);
+           trigger.photonView.RPC("AddGroupPlayer", RpcTarget.Others, player);
 
             trigger = other.GetComponent<RoomTrigger>();
 
