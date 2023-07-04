@@ -51,7 +51,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         if (other.CompareTag("Room"))
         {
             Player player = photonView.Owner;
-
+            groupsToAdd.Clear();
             trigger = other.GetComponent<RoomTrigger>();
 
             if (trigger != null && photonView.IsMine)
@@ -123,6 +123,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (_isOutGroup == true)
             {
                 toRemove = trigger._listPlayer.ToArray();
+                Debug.Log("Lenght Tomove in Update + " + toRemove.Length);
                 toAdd = new byte[0];
             }
 
