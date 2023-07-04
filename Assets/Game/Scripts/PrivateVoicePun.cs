@@ -117,7 +117,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
 
                 toRemove = trigger._listPlayer.ToArray();
-                toAdd = new byte[] { this.TargetInterestGroup };
+                toAdd = new byte[0];
                 Debug.Log("Length to add " + toAdd.Length);
             }
            
