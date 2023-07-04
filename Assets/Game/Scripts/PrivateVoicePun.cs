@@ -85,8 +85,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     {
         if (photonView.Owner != null)
         {
-            groupsToAdd.Remove(TargetInterestGroup);
-            groupsToRemove.Add(TargetInterestGroup);
+            if (groupsToRemove.Contains((byte)photonView.OwnerActorNr)) ;
+            Debug.Log("call Oneractor");
         }
         
     }
