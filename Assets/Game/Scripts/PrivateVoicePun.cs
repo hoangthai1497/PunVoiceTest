@@ -115,11 +115,9 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             }
             if (_isOutGroup == true)
             {
-                toRemove = trigger._listPlayer.ToArray();
+                toRemove = new byte[0];//trigger._listPlayer.ToArray();
                 toAdd = new byte[0];
-                Debug.Log("Length to add " + toAdd.Length);
-                groupsToAdd.Clear();
-                groupsToRemove.Clear();
+                Debug.Log("Length to add " + toAdd.Length);              
             }
 
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
