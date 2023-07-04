@@ -42,6 +42,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         this.IsLocalCheck();
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
 
@@ -65,14 +66,24 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveToList", RpcTarget.All, TargetInterestGroup);
-                groupsToRemove = trigger._listInterestGroupAdd;
-                groupsToAdd = trigger._listInterestGroupAdd;
+                //groupsToRemove = trigger._listInterestGroupAdd;
+                //groupsToAdd = trigger._listInterestGroupAdd;
                 foreach (var item in groupsToAdd)
                 {
                     Debug.Log("Groud add " + item);
                 }
             }
+
+
+            photonView.RPC("UpdateListRoom", RpcTarget.All);
+
         }
+    }
+    [PunRPC]
+    public void UpdateListRoom()
+    {
+        groupsToAdd = trigger._listInterestGroupAdd;
+        groupsToRemove = trigger._listInterestGroupAdd;
     }
 
     private void ToggleTransmission()
@@ -96,7 +107,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             byte[] toAdd = null;
             byte[] toRemove = null;
             if (this.groupsToAdd.Count > 0)
-            {               
+            {
                 toAdd = this.groupsToAdd.ToArray();
             }
             if (this.groupsToRemove.Count > 0)
@@ -142,11 +153,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     protected void Update()
     {
-        if (trigger != null)
-        {
-            groupsToAdd = trigger._listInterestGroupAdd;
-            groupsToRemove = trigger._listInterestGroupAdd;
-        }
+
         if (!PunVoiceClient.Instance.Client.InRoom)
         {
             this.subscribedGroups = null;

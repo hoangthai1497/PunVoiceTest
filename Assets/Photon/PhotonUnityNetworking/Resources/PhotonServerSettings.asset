@@ -43,6 +43,9 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - UpdateList
+  - AddToList
+  - RemoveToList
+  - UpdateListRoom
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
