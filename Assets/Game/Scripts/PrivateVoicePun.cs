@@ -44,7 +44,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     }
     private void Start()
     {
-        ToggleTransmission();
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -119,7 +119,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             }
             if (_isOutGroup == true)
             {
-                toRemove = new byte[0];//trigger._listPlayer.ToArray();
+                toRemove = trigger._listPlayer.ToArray();
                 toAdd = new byte[] { TargetInterestGroup};
                 Debug.Log("Length to add " + toAdd.Length);              
             }
