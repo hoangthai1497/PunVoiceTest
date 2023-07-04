@@ -186,6 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groupsToAdd: 
   groupsToRemove: 
+  tempGroup: 
   subscribedGroups: 
 --- !u!114 &114637873792288396
 MonoBehaviour:
