@@ -11,12 +11,12 @@ using UnityEngine;
 public class PrivateVoicePun : MonoBehaviourPunCallbacks
 {
     public List<byte> groupsToAdd = new List<byte>();
-    public List<byte> groupsToRemove = new List<byte>();
-    public byte[] tempGroup;
+    public List<byte> groupsToRemove = new List<byte>(); 
 
     [SerializeField] // TODO: make it readonly
     private byte[] subscribedGroups;
     private bool _isOutGroup = false;
+    private bool _isInGroup = false;
     private byte _roomGroup = 5;
     private PhotonVoiceView photonVoiceView;
     private PhotonView photonView;
@@ -49,6 +49,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
         if (other.CompareTag("Room"))
         {
+            _isInGroup = true;
             _isOutGroup = false;
             trigger = other.GetComponent<RoomTrigger>();
 
@@ -72,6 +73,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 //groupsToAdd = trigger._listInterestGroupAdd;
             }
             _isOutGroup = true;
+            _isInGroup = false;
         }
     }
 
@@ -94,7 +96,10 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     private void ChangeGroupSubcrise()
     {
-
+        if (_isInGroup == true)
+        {
+            groupsToAdd = trigger._listInterestGroupAdd;
+        }
         if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
         {
             byte[] toAdd = null;
@@ -115,6 +120,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 toAdd = new byte[] { this.TargetInterestGroup };
                 Debug.Log("Length to add " + toAdd.Length);
             }
+           
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
             {
                 if (this.subscribedGroups != null)
