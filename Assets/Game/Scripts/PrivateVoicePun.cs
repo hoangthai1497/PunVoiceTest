@@ -50,8 +50,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     {
         if (other.CompareTag("Room"))
         {
-            Player player = photonView.Owner;
-            groupsToAdd.Clear();
+            Player player = photonView.Owner;          
             trigger = other.GetComponent<RoomTrigger>();
 
             if (trigger != null && photonView.IsMine)
@@ -74,7 +73,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
                 trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
                 trigger.photonView.RPC("RemoveGroupPlayer", RpcTarget.Others, player);
-                groupsToRemove = trigger._listInterestGroupRemove;
+                groupsToRemove = trigger._listPlayer;
                 foreach (var item in trigger.PlayerIngroup)
                 {
                     if (!item.IsLocal && item != photonView.Owner)
@@ -122,7 +121,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             }
             if (_isOutGroup == true)
             {
-                toRemove = trigger._listPlayer.ToArray();
+                //toRemove = trigger._listPlayer.ToArray();
                 Debug.Log("Lenght Tomove in Update + " + toRemove.Length);
                 toAdd = new byte[0];
             }
