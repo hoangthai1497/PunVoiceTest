@@ -52,8 +52,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null && photonView.IsMine)
             {
-                // trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
-                trigger._listInterestGroupAdd.Add(TargetInterestGroup);
+                trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
+                //trigger._listInterestGroupAdd.Add(TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
             }
         }
@@ -83,7 +83,11 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     [PunRPC]
     public void UpdateListRoom()
     {
-        
+        if (photonView.Owner != null)
+        {
+            groupsToAdd.Remove(TargetInterestGroup);
+            groupsToRemove.Add(TargetInterestGroup);
+        }
         
     }
 
