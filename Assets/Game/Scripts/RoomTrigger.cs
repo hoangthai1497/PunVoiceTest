@@ -24,12 +24,16 @@ public class RoomTrigger : MonoBehaviour
         _listInterestGroupAdd.Add(value);
     }
     [PunRPC]
-    public void RemoveToList(byte value)
+    public void RemoveListFromAdd(byte value)
     {
         if (_listInterestGroupAdd.Contains(value))
         {
             _listInterestGroupAdd.Remove(value);            
-        }
+        }        
+    }
+    [PunRPC]
+    public void AddToRemoveList(byte value)
+    {
         if (!_listInterestGroupRemove.Contains(value))
         {
             _listInterestGroupRemove.Add(value);

@@ -12,7 +12,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 {
     public List<byte> groupsToAdd = new List<byte>();
     public List<byte> groupsToRemove = new List<byte>();
-
+    public List<byte> tempGroup = new List<byte>();
 
     [SerializeField] // TODO: make it readonly
     private byte[] subscribedGroups;
@@ -65,10 +65,12 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         {
             if (trigger != null && photonView.IsMine)
             {
-                trigger.photonView.RPC("RemoveToList", RpcTarget.All, TargetInterestGroup);
+                tempGroup = trigger._listInterestGroupAdd;
+                trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
+                trigger.photonView.RPC("AddToRemoveList", RpcTarget.All, TargetInterestGroup);
+                groupsToRemove = trigger._listInterestGroupRemove;
+                groupsToAdd = trigger._listInterestGroupAdd;
             }
-            groupsToAdd = trigger._listInterestGroupAdd;
-            groupsToRemove = trigger._listInterestGroupRemove;
 
             _isOutGroup = true;
 
@@ -111,7 +113,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (_isOutGroup == true)
             {
                 toAdd = null;
-                toRemove = null;
+                toRemove = tempGroup.ToArray();
             }
 
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
