@@ -12,7 +12,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 {
     public List<byte> groupsToAdd = new List<byte>();
     public List<byte> groupsToRemove = new List<byte>();
-    public List<byte> tempGroup = new List<byte>();
+    public byte[] tempGroup;
 
     [SerializeField] // TODO: make it readonly
     private byte[] subscribedGroups;
@@ -65,7 +65,6 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         {
             if (trigger != null && photonView.IsMine)
             {
-                tempGroup = trigger._listInterestGroupAdd;
                 trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
                 trigger.photonView.RPC("AddToRemoveList", RpcTarget.All, TargetInterestGroup);
                 groupsToRemove = trigger._listInterestGroupRemove;
@@ -112,12 +111,49 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             }
             if (_isOutGroup == true)
             {
-                toAdd = null;
-                toRemove = tempGroup.ToArray();
+                if (this.tempGroup != null)
+                {
+                    List<byte> list = new List<byte>();
+                    for (int i = 0; i < this.tempGroup.Length; i++)
+                    {
+                        list.Add(this.tempGroup[i]);
+                    }
+                    for (int i = 0; i < this.groupsToRemove.Count; i++)
+                    {
+                        if (list.Contains(this.groupsToRemove[i]))
+                        {
+                            list.Remove(this.groupsToRemove[i]);
+                        }
+                    }
+                    for (int i = 0; i < this.groupsToAdd.Count; i++)
+                    {
+                        if (!list.Contains(this.groupsToAdd[i]))
+                        {
+                            list.Add(this.groupsToAdd[i]);
+                        }
+                    }
+                    this.tempGroup = list.ToArray();
+                }
+                else
+                {
+                    this.tempGroup = toAdd;
+                }
+                toRemove = tempGroup;
+                toAdd = new byte[] {0};
+                Debug.Log("toRemove " + toRemove.Length);
+               
+                toRemove = new byte[] { 1, 2 };
             }
-
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
             {
+                for (int i = 0; i < toRemove.Length; i++)
+                {
+                    Debug.Log("remove + " + toRemove[i]);
+                }
+                for (int i = 0; i < toAdd.Length; i++)
+                {
+                    Debug.Log("toAdd + " + toRemove[i]);
+                }
                 if (this.subscribedGroups != null)
                 {
                     List<byte> list = new List<byte>();
