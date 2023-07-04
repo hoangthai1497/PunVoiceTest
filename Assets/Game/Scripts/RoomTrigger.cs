@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using Photon.Voice.PUN;
 
 public enum RoomName
-{ 
-  
+{
+
 }
 public class RoomTrigger : MonoBehaviour
 {
-    
+
     public List<byte> _listInterestGroupAdd = new List<byte>();
     public List<byte> _listInterestGroupRemove = new List<byte>();
 
     public List<byte> _listPlayer = new List<byte>();
     public List<Player> PlayerIngroup = new List<Player>();
-   
+
 
     public PhotonView photonView;
     private void Awake()
@@ -38,14 +38,14 @@ public class RoomTrigger : MonoBehaviour
     {
         if (_listInterestGroupAdd.Contains(value))
         {
-            _listInterestGroupAdd.Remove(value);            
+            _listInterestGroupAdd.Remove(value);
         }
         if (!_listInterestGroupRemove.Contains(value))
         {
             _listInterestGroupRemove.Add(value);
         }
     }
-  [PunRPC]
+    [PunRPC]
     public void AddGroupPlayer(Player player)
     {
         if (!PlayerIngroup.Contains(player))
@@ -54,7 +54,7 @@ public class RoomTrigger : MonoBehaviour
         }
     }
     [PunRPC]
-   public void RemoveGroupPlayer(Player player)
+    public void RemoveGroupPlayer(Player player)
     {
         if (PlayerIngroup.Contains(player))
         {
