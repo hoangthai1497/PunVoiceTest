@@ -73,7 +73,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
                 trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
                 trigger.photonView.RPC("RemoveGroupPlayer", RpcTarget.Others, player);
-                groupsToRemove = trigger._listPlayer;
+                groupsToRemove = trigger._listInterestGroupRemove;
                 foreach (var item in trigger.PlayerIngroup)
                 {
                     if (!item.IsLocal && item != photonView.Owner)
@@ -118,9 +118,9 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             }
             if (_isOutGroup == true)
             {
-                toRemove = trigger._listPlayer.ToArray();
+                toRemove = trigger._listInterestGroupAdd.ToArray();
                 Debug.Log("chieu dai cua toREmove " + toRemove.Length);
-                toAdd = new byte[] { this.TargetInterestGroup};
+                toAdd = new byte[0];
             }
 
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
