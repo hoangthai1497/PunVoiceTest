@@ -79,7 +79,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 {
                     if (!item.IsLocal && item != photonView.Owner)
                     {
-                        PunVoiceClient.Instance.Client.OpChangeGroups(null, new byte[0]);
+                        PunVoiceClient.Instance.Client.OpChangeGroups(new byte[] { TargetInterestGroup}, new byte[0]);
                     }
                 }
             }
@@ -98,7 +98,6 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             byte group = this.TargetInterestGroup;
             if (this.photonVoiceView.RecorderInUse.InterestGroup != group)
             {
-
                 this.photonVoiceView.RecorderInUse.InterestGroup = group;
             }
             this.photonVoiceView.RecorderInUse.RecordingEnabled = true;
