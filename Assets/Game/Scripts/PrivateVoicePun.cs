@@ -78,7 +78,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 {
                     if (!item.IsLocal && item != photonView.Owner)
                     {
-                        PunVoiceClient.Instance.Client.OpChangeGroups(new byte[] { TargetInterestGroup}, new byte[0]);
+                        PunVoiceClient.Instance.Client.OpChangeGroups(null, new byte[0]);
                     }
                 }
             }
@@ -121,8 +121,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             }
             if (_isOutGroup == true)
             {
-                //toRemove = trigger._listPlayer.ToArray();
-                Debug.Log("Lenght Tomove in Update + " + toRemove.Length);
+                toRemove = null;                Debug.Log("Lenght Tomove in Update + " + toRemove.Length);
                 toAdd = new byte[0];
             }
 
