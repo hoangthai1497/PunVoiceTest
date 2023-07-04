@@ -11,7 +11,7 @@ using UnityEngine;
 public class PrivateVoicePun : MonoBehaviourPunCallbacks
 {
     public List<byte> groupsToAdd = new List<byte>();
-    public List<byte> groupsToRemove = new List<byte>(); 
+    public List<byte> groupsToRemove = new List<byte>();
 
     [SerializeField] // TODO: make it readonly
     private byte[] subscribedGroups;
@@ -68,9 +68,12 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
-
-                groupsToRemove = trigger._listPlayer;
+                if (groupsToRemove.Equals(trigger._listInterestGroupRemove))
+                {
+                    groupsToRemove = trigger._listPlayer;
+                }
                 //groupsToAdd = trigger._listInterestGroupAdd;
+
             }
             _isOutGroup = true;
             _isInGroup = false;
@@ -96,10 +99,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     private void ChangeGroupSubcrise()
     {
-        if (_isInGroup == true)
-        {
-            groupsToAdd = trigger._listInterestGroupAdd;
-        }
+        
         if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
         {
             byte[] toAdd = null;
@@ -115,12 +115,13 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             }
             if (_isOutGroup == true)
             {
-
                 toRemove = trigger._listPlayer.ToArray();
                 toAdd = new byte[0];
                 Debug.Log("Length to add " + toAdd.Length);
+                groupsToAdd.Clear();
+                groupsToRemove.Clear();
             }
-           
+
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
             {
                 if (this.subscribedGroups != null)
@@ -158,6 +159,10 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     protected void Update()
     {
+        if (_isInGroup == true)
+        {
+            groupsToAdd = trigger._listInterestGroupAdd;
+        }
 
         if (!PunVoiceClient.Instance.Client.InRoom)
         {
