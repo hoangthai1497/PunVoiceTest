@@ -33,20 +33,19 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             return 0;
         }
     }
-
+    
     private void Awake()
     {
         this.photonVoiceView = this.GetComponentInParent<PhotonVoiceView>();
         this.photonView = this.GetComponentInParent<PhotonView>();
-        //tmpCollider = this.GetComponent<Collider>();
-        //tmpCollider.isTrigger = true;
+        tmpCollider = this.GetComponent<Collider>();
+        tmpCollider.isTrigger = true;
         this.IsLocalCheck();
     }
 
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Room"))
         {
             _isInGroup = true;
@@ -64,7 +63,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     {
 
         if (other.CompareTag("Room"))
-        {
+        {      
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
