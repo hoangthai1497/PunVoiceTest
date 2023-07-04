@@ -13,6 +13,7 @@ public class RoomTrigger : MonoBehaviour
     
     public List<byte> _listInterestGroupAdd = new List<byte>();
     public List<byte> _listInterestGroupRemove = new List<byte>();
+    private byte[] temp = new byte[4];
     public PhotonView photonView;
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class RoomTrigger : MonoBehaviour
     public void AddToList(byte value)
     {
         _listInterestGroupAdd.Add(value);
+        temp = _listInterestGroupAdd.ToArray();
     }
     [PunRPC]
     public void RemoveListFromAdd(byte value)
