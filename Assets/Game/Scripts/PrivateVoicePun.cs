@@ -51,6 +51,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         {
             _isOutGroup = false;
             trigger = other.GetComponent<RoomTrigger>();
+
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
@@ -66,9 +67,9 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
-                
+
                 groupsToRemove = trigger._listPlayer;
-                groupsToAdd = trigger._listInterestGroupAdd;
+                //groupsToAdd = trigger._listInterestGroupAdd;
             }
             _isOutGroup = true;
         }
@@ -112,10 +113,10 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
                 toRemove = trigger._listPlayer.ToArray();
                 toAdd = new byte[] { this.TargetInterestGroup };
-                Debug.Log("Length to add " +toAdd.Length);
+                Debug.Log("Length to add " + toAdd.Length);
             }
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
-            {                
+            {
                 if (this.subscribedGroups != null)
                 {
                     List<byte> list = new List<byte>();
@@ -143,8 +144,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
                 {
                     this.subscribedGroups = toAdd;
                 }
-                //this.groupsToAdd.Clear();
-                //this.groupsToRemove.Clear();
+
             }
 
         }
@@ -152,11 +152,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     protected void Update()
     {
-        //if (isInRoom == true)
-        //{
-        //    groupsToRemove = trigger._listInterestGroupRemove;
-        //    groupsToAdd = trigger._listInterestGroupAdd;
-        //}
+
         if (!PunVoiceClient.Instance.Client.InRoom)
         {
             this.subscribedGroups = null;
