@@ -42,7 +42,10 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         tmpCollider.isTrigger = true;
         this.IsLocalCheck();
     }
-
+    private void Start()
+    {
+        ToggleTransmission();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -56,6 +59,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             {
                 trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
+                ToggleTransmission();
             }
         }
     }
@@ -67,10 +71,11 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
-                if (groupsToRemove.Equals(trigger._listInterestGroupRemove))
+                if (groupsToRemove.Equals(trigger._listInterestGroupRemove) == false)
                 {
                     groupsToRemove = trigger._listPlayer;
                 }
+                    this.photonVoiceView.RecorderInUse.InterestGroup = 0;
                 //groupsToAdd = trigger._listInterestGroupAdd;
 
             }
@@ -168,7 +173,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         else if (this.IsLocalCheck())
         {
             ChangeGroupSubcrise();
-            this.ToggleTransmission();
+           // this.ToggleTransmission();
         }
     }
 
