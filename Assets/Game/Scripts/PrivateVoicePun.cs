@@ -37,8 +37,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     {
         this.photonVoiceView = this.GetComponentInParent<PhotonVoiceView>();
         this.photonView = this.GetComponentInParent<PhotonView>();
-        tmpCollider = this.GetComponent<Collider>();
-        tmpCollider.isTrigger = true;
+        //tmpCollider = this.GetComponent<Collider>();
+        //tmpCollider.isTrigger = true;
         this.IsLocalCheck();
     }
 
@@ -52,7 +52,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null && photonView.IsMine)
             {
-                trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
+                // trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
+                trigger._listInterestGroupAdd.Add(TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
             }
         }
@@ -66,8 +67,8 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveToList", RpcTarget.All, TargetInterestGroup);
-                //groupsToRemove = trigger._listInterestGroupAdd;
-                //groupsToAdd = trigger._listInterestGroupAdd;
+                groupsToRemove = trigger._listInterestGroupRemove;
+                groupsToAdd = trigger._listInterestGroupAdd;
                 foreach (var item in groupsToAdd)
                 {
                     Debug.Log("Groud add " + item);
@@ -82,9 +83,10 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     [PunRPC]
     public void UpdateListRoom()
     {
-        groupsToAdd = trigger._listInterestGroupAdd;
-        groupsToRemove = trigger._listInterestGroupAdd;
+        
+        
     }
+
 
     private void ToggleTransmission()
     {
