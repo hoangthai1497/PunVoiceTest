@@ -13,7 +13,11 @@ public class RoomTrigger : MonoBehaviour
     
     public List<byte> _listInterestGroupAdd = new List<byte>();
     public List<byte> _listInterestGroupRemove = new List<byte>();
+
     public List<byte> _listPlayer = new List<byte>();
+    public List<Player> PlayerIngroup = new List<Player>();
+   
+
     public PhotonView photonView;
     private void Awake()
     {
@@ -23,7 +27,11 @@ public class RoomTrigger : MonoBehaviour
     public void AddToList(byte value)
     {
         _listInterestGroupAdd.Add(value);
-        _listPlayer.Add(value);
+        if (!_listPlayer.Contains(value))
+        {
+            _listPlayer.Add(value);
+        }
+
     }
     [PunRPC]
     public void RemoveListFromAdd(byte value)
@@ -37,5 +45,20 @@ public class RoomTrigger : MonoBehaviour
             _listInterestGroupRemove.Add(value);
         }
     }
-   
+  [PunRPC]
+    public void AddGroupPlayer(Player player)
+    {
+        if (!PlayerIngroup.Contains(player))
+        {
+            PlayerIngroup.Add(player);
+        }
+    }
+    [PunRPC]
+   public void RemoveGroupPlayer(Player player)
+    {
+        if (PlayerIngroup.Contains(player))
+        {
+            PlayerIngroup.Remove(player);
+        }
+    }
 }

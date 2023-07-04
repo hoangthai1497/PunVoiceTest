@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
+using Photon.Realtime;
 
 //[RequireComponent(typeof(Collider))]
 //[RequireComponent(typeof(Rigidbody))]
@@ -15,9 +16,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     [SerializeField] // TODO: make it readonly
     private byte[] subscribedGroups;
-    private bool _isOutGroup = false;
-    private bool _isInGroup = false;
-    private byte _roomGroup = 5;
+    private bool _isOutGroup = false;   
     private PhotonVoiceView photonVoiceView;
     private PhotonView photonView;
     private RoomTrigger trigger;
@@ -33,7 +32,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             return 0;
         }
     }
-    
+
     private void Awake()
     {
         this.photonVoiceView = this.GetComponentInParent<PhotonVoiceView>();
@@ -44,22 +43,23 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     }
     private void Start()
     {
-        
+       
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Room"))
         {
-            _isInGroup = true;
-            _isOutGroup = false;
+            Player player = other.GetComponent<PhotonView>().Owner;
+            photonView.RPC("AddGroupPlayer", RpcTarget.Others, player);
+
             trigger = other.GetComponent<RoomTrigger>();
 
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
-                ToggleTransmission();
+            
             }
         }
     }
@@ -67,20 +67,24 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     {
 
         if (other.CompareTag("Room"))
-        {      
+        {
+            Player player = other.GetComponent<PhotonView>().Owner;
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveListFromAdd", RpcTarget.All, TargetInterestGroup);
-                if (groupsToRemove.Equals(trigger._listInterestGroupRemove) == false)
+               
+                foreach (var item in trigger.PlayerIngroup)
                 {
-                    groupsToRemove = trigger._listPlayer;
+                    if (!item.IsLocal && item != photonView.Owner)
+                    {
+                        
+                        PunVoiceClient.Instance.Client.OpChangeGroups(null, new byte[0]);
+                    }
                 }
-                    this.photonVoiceView.RecorderInUse.InterestGroup = 0;
-                //groupsToAdd = trigger._listInterestGroupAdd;
-
             }
+            trigger.photonView.RPC("RemoveGroupPlayer", RpcTarget.Others, player);
             _isOutGroup = true;
-            _isInGroup = false;
+         
         }
     }
 
@@ -103,7 +107,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     private void ChangeGroupSubcrise()
     {
-        
+
         if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
         {
             byte[] toAdd = null;
@@ -120,8 +124,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (_isOutGroup == true)
             {
                 toRemove = trigger._listPlayer.ToArray();
-                toAdd = new byte[] { TargetInterestGroup};
-                Debug.Log("Length to add " + toAdd.Length);              
+                toAdd = new byte[] { this.TargetInterestGroup };               
             }
 
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
@@ -160,11 +163,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     }
 
     protected void Update()
-    {
-        if (_isInGroup == true)
-        {
-            groupsToAdd = trigger._listInterestGroupAdd;
-        }
+    {       
 
         if (!PunVoiceClient.Instance.Client.InRoom)
         {
@@ -173,7 +172,7 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
         else if (this.IsLocalCheck())
         {
             ChangeGroupSubcrise();
-           // this.ToggleTransmission();
+            this.ToggleTransmission();
         }
     }
 
