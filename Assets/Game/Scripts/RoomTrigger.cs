@@ -4,8 +4,13 @@ using UnityEngine;
 using System.Collections.Generic;
 using Photon.Voice.PUN;
 
+public enum RoomName
+{ 
+  
+}
 public class RoomTrigger : MonoBehaviour
 {
+    
     public List<byte> _listInterestGroupAdd = new List<byte>();
     public List<byte> _listInterestGroupRemove = new List<byte>();
     public PhotonView photonView;
@@ -23,8 +28,7 @@ public class RoomTrigger : MonoBehaviour
     {
         if (_listInterestGroupAdd.Contains(value))
         {
-            _listInterestGroupAdd.Remove(value);
-            Debug.Log("remove");
+            _listInterestGroupAdd.Remove(value);            
         }
         if (!_listInterestGroupRemove.Contains(value))
         {

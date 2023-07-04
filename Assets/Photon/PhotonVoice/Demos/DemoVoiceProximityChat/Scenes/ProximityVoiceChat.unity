@@ -507,6 +507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _listInterestGroupAdd: 
   _listInterestGroupRemove: 
+  photonView: {fileID: 827922987}
 --- !u!114 &827922987
 MonoBehaviour:
   m_ObjectHideFlags: 0

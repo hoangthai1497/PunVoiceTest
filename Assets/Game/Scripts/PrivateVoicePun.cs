@@ -13,9 +13,10 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
     public List<byte> groupsToAdd = new List<byte>();
     public List<byte> groupsToRemove = new List<byte>();
 
+
     [SerializeField] // TODO: make it readonly
     private byte[] subscribedGroups;
-    private bool isOut = false;
+    private bool _isOutGroup = false;
     private byte _roomGroup = 5;
     private PhotonVoiceView photonVoiceView;
     private PhotonView photonView;
@@ -48,12 +49,11 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
         if (other.CompareTag("Room"))
         {
-            isOut = false;
+            _isOutGroup = false;
             trigger = other.GetComponent<RoomTrigger>();
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("AddToList", RpcTarget.All, TargetInterestGroup);
-                //trigger._listInterestGroupAdd.Add(TargetInterestGroup);
                 groupsToAdd = trigger._listInterestGroupAdd;
             }
         }
@@ -63,33 +63,19 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
         if (other.CompareTag("Room"))
         {
-            isOut = true;
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveToList", RpcTarget.All, TargetInterestGroup);
-                groupsToRemove = trigger._listInterestGroupRemove;
-                groupsToAdd = trigger._listInterestGroupAdd;
-                foreach (var item in groupsToAdd)
-                {
-                    Debug.Log("Groud add " + item);
-                }
             }
+            groupsToAdd = trigger._listInterestGroupAdd;
+            groupsToRemove = trigger._listInterestGroupRemove;
 
-
-            photonView.RPC("UpdateListRoom", RpcTarget.All);
+            _isOutGroup = true;
 
         }
     }
-    [PunRPC]
-    public void UpdateListRoom()
-    {
-        if (photonView.Owner != null)
-        {
-            if (groupsToRemove.Contains((byte)photonView.OwnerActorNr)) ;
-            Debug.Log("call Oneractor");
-        }
-        
-    }
+
+
 
 
     private void ToggleTransmission()
@@ -108,10 +94,12 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     private void ChangeGroupSubcrise()
     {
+
         if (this.groupsToAdd.Count > 0 || this.groupsToRemove.Count > 0)
         {
             byte[] toAdd = null;
             byte[] toRemove = null;
+
             if (this.groupsToAdd.Count > 0)
             {
                 toAdd = this.groupsToAdd.ToArray();
@@ -119,6 +107,11 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
             if (this.groupsToRemove.Count > 0)
             {
                 toRemove = this.groupsToRemove.ToArray();
+            }
+            if (_isOutGroup == true)
+            {
+                toAdd = null;
+                toRemove = null;
             }
 
             if (PunVoiceClient.Instance.Client.OpChangeGroups(toRemove, toAdd))
@@ -159,7 +152,11 @@ public class PrivateVoicePun : MonoBehaviourPunCallbacks
 
     protected void Update()
     {
-
+        //if (isInRoom == true)
+        //{
+        //    groupsToRemove = trigger._listInterestGroupRemove;
+        //    groupsToAdd = trigger._listInterestGroupAdd;
+        //}
         if (!PunVoiceClient.Instance.Client.InRoom)
         {
             this.subscribedGroups = null;
