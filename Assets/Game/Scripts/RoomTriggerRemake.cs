@@ -16,17 +16,17 @@ public class RoomTriggerRemake : MonoBehaviour
         photonView = GetComponent<PhotonView>();
     }
 
-    [PunRPC]
-    public void UpdatePlayerGroupList()
-    {
-        foreach (Player player in playersInGroup)
-        {
-            if (!player.IsLocal)
-            {
-                PunVoiceClient.Instance.Client.OpChangeGroups(new byte[] { photonView.Group }, new byte[0]);
-            }
-        }
-    }
+    //[PunRPC]
+    //public void UpdatePlayerGroupList()
+    //{
+    //    foreach (Player player in playersInGroup)
+    //    {
+    //        if (!player.IsLocal)
+    //        {
+    //            PunVoiceClient.Instance.Client.OpChangeGroups(new byte[] { photonView.Group }, new byte[0]);
+    //        }
+    //    }
+    //}
 
     [PunRPC]
     public void AddToGroup(Player player)

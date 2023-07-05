@@ -8,7 +8,7 @@ public class PrivateVoicePunRemake : MonoBehaviourPunCallbacks
 {
     private PhotonVoiceView photonVoiceView;
     private PhotonView photonView;
-    private RoomTrigger trigger;
+    private RoomTriggerRemake trigger;
 
     public byte TargetInterestGroup
     {
@@ -36,13 +36,15 @@ public class PrivateVoicePunRemake : MonoBehaviourPunCallbacks
         if (other.CompareTag("Room"))
         {
             Player player = photonView.Owner;
-            trigger = other.GetComponent<RoomTrigger>();
+            trigger = other.GetComponent<RoomTriggerRemake>();
+            
 
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("AddToGroup", RpcTarget.All, player);
-                trigger.photonView.RPC("UpdatePlayerGroupList", RpcTarget.All);
+               // trigger.photonView.RPC("UpdatePlayerGroupList", RpcTarget.All);
                 photonView.RPC("UpdateGroupRegistration", RpcTarget.All);
+
             }
         }
     }
@@ -55,8 +57,8 @@ public class PrivateVoicePunRemake : MonoBehaviourPunCallbacks
             if (trigger != null && photonView.IsMine)
             {
                 trigger.photonView.RPC("RemoveFromGroup", RpcTarget.All, player);
+               //trigger.photonView.RPC("UpdatePlayerGroupList", RpcTarget.All);
                 photonView.RPC("UpdateGroupRegistration", RpcTarget.All);
-                trigger.photonView.RPC("UpdatePlayerGroupList", RpcTarget.All);
             }
         }
     }
@@ -66,8 +68,8 @@ public class PrivateVoicePunRemake : MonoBehaviourPunCallbacks
     {
         if (trigger != null)
         {
-            byte group = trigger.photonView.Group;
-            PunVoiceClient.Instance.Client.OpChangeGroups(new byte[] { group }, new byte[0]);
+            byte[] group = trigger.interestGroups.ToArray();
+            PunVoiceClient.Instance.Client.OpChangeGroups(group, new byte[0]);
         }
     }
 
@@ -75,7 +77,7 @@ public class PrivateVoicePunRemake : MonoBehaviourPunCallbacks
     {
         if (photonVoiceView.RecorderInUse != null)
         {
-            byte group = this.TargetInterestGroup; 
+            byte group = this.TargetInterestGroup;
             if (photonVoiceView.RecorderInUse.InterestGroup != group)
             {
                 photonVoiceView.RecorderInUse.InterestGroup = group;

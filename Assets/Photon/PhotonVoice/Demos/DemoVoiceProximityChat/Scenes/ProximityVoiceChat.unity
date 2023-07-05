@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 827922984}
   - component: {fileID: 827922983}
   - component: {fileID: 827922982}
-  - component: {fileID: 827922986}
+  - component: {fileID: 827922988}
   - component: {fileID: 827922987}
   m_Layer: 0
   m_Name: Plane (1)
@@ -493,22 +493,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &827922986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 827922981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3a37284e88b0fa4db9dea37464a22b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _listInterestGroupAdd: 
-  _listInterestGroupRemove: 
-  _listPlayer: 
-  photonView: {fileID: 827922987}
 --- !u!114 &827922987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,6 +515,20 @@ MonoBehaviour:
   sceneViewId: 2
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &827922988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827922981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7f08fbcac3aefb4fb679f4a5ac9c085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interestGroups: 
+  photonView: {fileID: 827922987}
 --- !u!1 &866362680
 GameObject:
   m_ObjectHideFlags: 0
